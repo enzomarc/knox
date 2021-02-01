@@ -8,7 +8,10 @@ class ThemeProvider extends ChangeNotifier {
     this.appTheme = this.lightTheme;
   }
 
-  final ThemeData lightTheme = ThemeData();
+  final ThemeData lightTheme = ThemeData(
+    accentColor: Color(0xFF03A69A),
+    brightness: Brightness.dark,
+  );
 
   setAppTheme(ThemeData theme) {
     this.appTheme = theme;
