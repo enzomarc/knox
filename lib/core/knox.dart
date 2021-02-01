@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:knox/core/routes.dart';
-import 'package:knox/core/providers/theme_provider.dart';
 import 'package:provider/provider.dart';
 import 'resources/dio_wrapper.dart';
+import '../core/routes.dart';
+import '../core/providers/theme_provider.dart';
 
 class Knox extends StatelessWidget {
   @override
