@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:nuage/core/providers/theme_provider.dart';
 import 'package:provider/provider.dart';
-import 'core/nuage.dart';
+import 'package:knox/core/providers/theme_provider.dart';
+import 'core/knox.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -17,7 +17,7 @@ Future<void> main() async {
           create: (context) => ThemeProvider(),
         ),
       ],
-      child: Nuage(),
+      child: Knox(),
     ),
   );
 }
