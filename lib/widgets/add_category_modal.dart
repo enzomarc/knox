@@ -139,7 +139,7 @@ class _AddCategoryModalState extends State<AddCategoryModal> {
                           }
                         },
                         color: Colors.transparent,
-                        splashColor: Color(0xFF03A69A),
+                        splashColor: Color(0xFF03A69A).withOpacity(0.3),
                         padding: EdgeInsets.symmetric(horizontal: 25.0),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(100.0),

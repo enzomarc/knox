@@ -1,24 +1,25 @@
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_icons/flutter_icons.dart';
 import 'package:knox/core/models/category.dart';
 import 'package:knox/core/models/password.dart';
 import 'package:knox/core/providers/category_provider.dart';
+import 'package:knox/core/providers/password_provider.dart';
+import 'package:knox/core/services/password_service.dart';
 import 'package:knox/core/utils/helpers.dart';
 import 'package:provider/provider.dart';
 import 'category.dart';
 import 'custom_field.dart';
 
-class AddPasswordModal extends StatefulWidget {
-  const AddPasswordModal({
+class AddAccountModal extends StatefulWidget {
+  const AddAccountModal({
     Key key,
   }) : super(key: key);
 
   @override
-  _AddPasswordModalState createState() => _AddPasswordModalState();
+  _AddAccountModalState createState() => _AddAccountModalState();
 }
 
-class _AddPasswordModalState extends State<AddPasswordModal> {
+class _AddAccountModalState extends State<AddAccountModal> {
   TextEditingController title = TextEditingController();
   TextEditingController website = TextEditingController();
   TextEditingController username = TextEditingController();
@@ -29,6 +30,7 @@ class _AddPasswordModalState extends State<AddPasswordModal> {
   Widget build(BuildContext context) {
     Size screenSize = MediaQuery.of(context).size;
     final provider = Provider.of<CategoryProvider>(context, listen: false);
+    final passwordProvider = Provider.of<PasswordProvider>(context, listen: false);
     List<Category> categories = provider.categories;
 
     return Container(
@@ -204,17 +206,23 @@ class _AddPasswordModalState extends State<AddPasswordModal> {
                           image: category.image,
                           localImage: category.localImage,
                           onDoubleTap: () async {
-                            Password password = Password(
-                              title: title.text,
-                              category: category.title.toLowerCase(),
-                              url: website.text,
-                              user: username.text,
-                              password: _password.text,
-                              image: imageUrl,
-                              localImage: false,
-                            );
+                            if (title.text.isNotEmpty && username.text.isNotEmpty) {
+                              Password password = Password(
+                                title: title.text,
+                                category: category.title.toLowerCase(),
+                                url: website.text,
+                                user: username.text,
+                                password: _password.text,
+                                image: imageUrl,
+                                localImage: false,
+                              );
 
-                            print(password);
+                              bool created = await passwordService.storePassword(password);
+                              if (created) {
+                                passwordProvider.getPasswords();
+                                Navigator.pop(context);
+                              }
+                            }
                           },
                         );
                       },

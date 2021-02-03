@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:knox/core/providers/password_provider.dart';
 import 'package:provider/provider.dart';
 import 'core/providers/theme_provider.dart';
 import 'core/providers/category_provider.dart';
@@ -19,6 +20,9 @@ Future<void> main() async {
         ),
         ChangeNotifierProvider(
           create: (context) => CategoryProvider(),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => PasswordProvider(),
         ),
       ],
       child: Knox(),

@@ -1,11 +1,14 @@
 import 'package:flutter_icons/flutter_icons.dart';
 import 'package:knox/core/models/category.dart';
+import 'package:knox/core/models/password.dart';
 import 'package:knox/core/providers/category_provider.dart';
+import 'package:knox/core/providers/password_provider.dart';
 import 'package:knox/core/utils/status_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:knox/widgets/add_category_modal.dart';
-import 'package:knox/widgets/add_password_modal.dart';
+import 'package:knox/widgets/add_account_modal.dart';
 import 'package:knox/widgets/category.dart';
+import 'package:knox/widgets/password.dart';
 import 'package:provider/provider.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 
@@ -46,7 +49,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   topRight: Radius.circular(30.0),
                 ),
               ),
-              builder: (BuildContext context) => AddPasswordModal(),
+              builder: (BuildContext context) => AddAccountModal(),
             );
           },
           child: Container(
@@ -374,86 +377,23 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     ),
                     SizedBox(height: 20.0),
                     Expanded(
-                      child: ListView.builder(
-                        itemCount: 10,
-                        itemBuilder: (context, index) {
-                          return GestureDetector(
-                            child: Container(
-                              padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 15.0),
-                              margin: EdgeInsets.only(bottom: 13.0),
-                              decoration: BoxDecoration(
-                                color: Color(0xFFF8F7FB),
-                                borderRadius: BorderRadius.circular(10.0),
-                              ),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: <Widget>[
-                                  Row(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    children: <Widget>[
-                                      Container(
-                                        padding: EdgeInsets.all(5.0),
-                                        decoration: BoxDecoration(
-                                          color: Colors.white,
-                                          borderRadius: BorderRadius.circular(500.0),
-                                          boxShadow: [
-                                            BoxShadow(
-                                              color: Color(0xFF334148).withOpacity(0.13),
-                                              spreadRadius: 1.0,
-                                              blurRadius: 10.0,
-                                              offset: Offset(0, 8),
-                                            ),
-                                          ],
-                                        ),
-                                        child: Icon(
-                                          FlutterIcons.spotify_ent,
-                                          color: Colors.green.shade400,
-                                        ),
-                                      ),
-                                      SizedBox(width: 15.0),
-                                      Column(
-                                        crossAxisAlignment: CrossAxisAlignment.start,
-                                        children: <Widget>[
-                                          Text(
-                                            'Spotify',
-                                            style: TextStyle(
-                                              color: Color(0xFF334148),
-                                              fontFamily: 'Source SemiBold',
-                                            ),
-                                          ),
-                                          SizedBox(height: 5.0),
-                                          Text(
-                                            'enzo.koriodan@gmail.com',
-                                            style: TextStyle(
-                                              color: Color(0xFF334148),
-                                              fontFamily: 'Source',
-                                              fontSize: 11.0,
-                                            ),
-                                          ),
-                                          SizedBox(height: 5.0),
-                                          Text(
-                                            '************',
-                                            style: TextStyle(
-                                              color: Color(0xFF334148),
-                                              fontFamily: 'Source',
-                                              fontSize: 11.0,
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ],
-                                  ),
-                                  InkWell(
-                                    child: Icon(
-                                      FlutterIcons.ios_more_ion,
-                                      size: 16.0,
-                                      color: Color(0xFF334148),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
+                      child: Consumer<PasswordProvider>(
+                        builder: (BuildContext context, PasswordProvider value, Widget child) {
+                          List<Password> passwords = value.passwords.reversed.take(10).toList();
+
+                          return ListView.builder(
+                            itemCount: passwords.length,
+                            itemBuilder: (context, index) {
+                              Password password = passwords[index];
+
+                              return PasswordWidget(
+                                title: password.title,
+                                username: password.user,
+                                password: password.password,
+                                image: password.image,
+                                localImage: password.localImage,
+                              );
+                            },
                           );
                         },
                       ),
