@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:provider/provider.dart';
-import 'package:knox/core/providers/theme_provider.dart';
+import 'core/providers/theme_provider.dart';
+import 'core/providers/category_provider.dart';
 import 'core/knox.dart';
 
 Future<void> main() async {
@@ -15,6 +16,9 @@ Future<void> main() async {
       providers: [
         ChangeNotifierProvider(
           create: (context) => ThemeProvider(),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => CategoryProvider(),
         ),
       ],
       child: Knox(),

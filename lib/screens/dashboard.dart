@@ -1,6 +1,12 @@
 import 'package:flutter_icons/flutter_icons.dart';
+import 'package:knox/core/models/category.dart';
+import 'package:knox/core/providers/category_provider.dart';
 import 'package:knox/core/utils/status_bar.dart';
 import 'package:flutter/material.dart';
+import 'package:knox/widgets/add_category_modal.dart';
+import 'package:knox/widgets/add_password_modal.dart';
+import 'package:knox/widgets/category.dart';
+import 'package:provider/provider.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 
 class DashboardScreen extends StatefulWidget {
@@ -9,6 +15,14 @@ class DashboardScreen extends StatefulWidget {
 }
 
 class _DashboardScreenState extends State<DashboardScreen> {
+  @override
+  void initState() {
+    final CategoryProvider categoryProvider = Provider.of<CategoryProvider>(context, listen: false);
+    categoryProvider.getCategories();
+
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     Size screenSize = MediaQuery.of(context).size;
@@ -21,7 +35,20 @@ class _DashboardScreenState extends State<DashboardScreen> {
       floatingActionButton: Material(
         type: MaterialType.transparency,
         child: InkWell(
-          onTap: () {},
+          onTap: () {
+            showModalBottomSheet(
+              context: context,
+              isScrollControlled: true,
+              barrierColor: Color(0xFF03A69A).withOpacity(0.3),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(30.0),
+                  topRight: Radius.circular(30.0),
+                ),
+              ),
+              builder: (BuildContext context) => AddPasswordModal(),
+            );
+          },
           child: Container(
             padding: EdgeInsets.symmetric(vertical: 13.0, horizontal: 20.0),
             margin: EdgeInsets.only(bottom: 10.0),
@@ -229,18 +256,34 @@ class _DashboardScreenState extends State<DashboardScreen> {
                               onTap: () {
                                 // add password category
                               },
-                              child: Container(
-                                padding: EdgeInsets.all(2.0),
-                                decoration: BoxDecoration(
-                                  border: Border.all(
-                                    color: Color(0xFF334148),
+                              child: GestureDetector(
+                                onTap: () {
+                                  showModalBottomSheet(
+                                    context: context,
+                                    isScrollControlled: true,
+                                    barrierColor: Color(0xFF334148).withOpacity(0.3),
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.only(
+                                        topLeft: Radius.circular(30.0),
+                                        topRight: Radius.circular(30.0),
+                                      ),
+                                    ),
+                                    builder: (BuildContext context) => AddCategoryModal(),
+                                  );
+                                },
+                                child: Container(
+                                  padding: EdgeInsets.all(2.0),
+                                  decoration: BoxDecoration(
+                                    border: Border.all(
+                                      color: Color(0xFF334148),
+                                    ),
+                                    borderRadius: BorderRadius.circular(3.0),
                                   ),
-                                  borderRadius: BorderRadius.circular(3.0),
-                                ),
-                                child: Icon(
-                                  FlutterIcons.plus_fea,
-                                  color: Color(0xFF334148),
-                                  size: 12.0,
+                                  child: Icon(
+                                    FlutterIcons.plus_fea,
+                                    color: Color(0xFF334148),
+                                    size: 12.0,
+                                  ),
                                 ),
                               ),
                             ),
@@ -249,50 +292,37 @@ class _DashboardScreenState extends State<DashboardScreen> {
                         SizedBox(height: 20.0),
                         SizedBox(
                           height: 120.0,
-                          child: ListView.builder(
-                            scrollDirection: Axis.horizontal,
-                            itemCount: 8,
-                            itemBuilder: (context, index) {
-                              return GestureDetector(
-                                child: Container(
-                                  margin: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 0.0),
-                                  width: 100.0,
-                                  child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.center,
-                                    children: <Widget>[
-                                      Container(
-                                        padding: EdgeInsets.all(20.0),
-                                        decoration: BoxDecoration(
-                                          color: Colors.white,
-                                          borderRadius: BorderRadius.circular(500.0),
-                                          boxShadow: [
-                                            BoxShadow(
-                                              color: Color(0xFF334148).withOpacity(0.13),
-                                              spreadRadius: 1.0,
-                                              blurRadius: 10.0,
-                                              offset: Offset(0, 8),
-                                            ),
-                                          ],
-                                        ),
-                                        child: Icon(
-                                          FlutterIcons.game_controller_sli,
-                                          color: Color(0xFF334148),
-                                        ),
-                                      ),
-                                      SizedBox(height: 15.0),
-                                      Text(
-                                        'Gaming',
-                                        overflow: TextOverflow.ellipsis,
-                                        style: TextStyle(
-                                          color: Color(0xFF334148),
-                                          fontFamily: 'Source SemiBold',
-                                          fontSize: 12.0,
-                                        ),
-                                      ),
-                                    ],
+                          child: Consumer<CategoryProvider>(
+                            builder: (BuildContext context, CategoryProvider value, Widget child) {
+                              List<Category> categories = value.categories;
+
+                              if (categories != null && categories.length > 0) {
+                                return ListView.builder(
+                                  scrollDirection: Axis.horizontal,
+                                  itemCount: categories.length,
+                                  itemBuilder: (context, index) {
+                                    Category category = categories[index];
+
+                                    return CategoryWidget(
+                                      title: category.title,
+                                      image: category.image,
+                                      localImage: category.localImage,
+                                    );
+                                  },
+                                );
+                              } else {
+                                return Center(
+                                  child: Text(
+                                    "There's no category available.\nClick on + to add category.",
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                      color: Color(0xFF334148).withOpacity(0.3),
+                                      fontFamily: 'Coves Bold',
+                                      fontSize: 15.0,
+                                    ),
                                   ),
-                                ),
-                              );
+                                );
+                              }
                             },
                           ),
                         ),
