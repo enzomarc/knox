@@ -3,30 +3,24 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class Storage {
   SharedPreferences _preferences;
-  Map<String, List<dynamic>> collections;
-
-  _init() async {
-    _preferences = await SharedPreferences.getInstance();
-    reload();
-  }
 
   /// Load collections data from shared preferences.
-  void reload() {
+  getCollections() async {
+    if (_preferences == null) _preferences = await SharedPreferences.getInstance();
     String json = _preferences.getString('collections');
 
     if (json != null)
-      collections = jsonDecode(json);
-    else
-      collections = {};
-  }
-
-  Storage() {
-    _init();
+      return jsonDecode(json);
+    else {
+      await _preferences.setString('collections', jsonEncode({}));
+      return {};
+    }
   }
 
   /// Get data from storage.
   /// Returns `defaultValue` if defined and data does not exists.
-  dynamic get(String collection, {defaultValue}) {
+  dynamic get(String collection, {defaultValue}) async {
+    var collections = await getCollections();
     var data = collections[collection];
     if (data == null && defaultValue != null) return defaultValue;
 
@@ -35,33 +29,33 @@ class Storage {
 
   /// Persist `data` into the given `collection`.
   Future store(String collection, dynamic data) async {
-    if (!collections.containsKey(collection)) collections[collection] = [];
-    collections[collection].add(data);
+    await getCollections().then((collections) async {
+      if (!collections.containsKey(collection)) collections[collection] = [];
+      collections[collection].add(data);
 
-    await _preferences.setString('collections', jsonEncode(collections));
-    reload();
+      await _preferences.setString('collections', jsonEncode(collections));
+    });
   }
 
   /// Return `true` if the given `item` exists into the given `collection`.
-  bool contains(String collection, dynamic item) {
+  Future<bool> contains(String collection, dynamic item) async {
     bool exists = false;
 
-    if (!collections.containsKey(collection))
-      return exists;
-    else
-      exists = collections[collection].contains(item);
+    await getCollections().then((collections) {
+      if (collections.containsKey(collection)) exists = collections[collection].contains(item);
+    });
 
     return exists;
   }
 
   /// Delete data with the given `key` from storage.
   Future delete(String collection, int index) async {
-    if (!collections.containsKey(collection)) return false;
+    // if (!collections.containsKey(collection)) return false;
 
-    if (collections[collection][index] != null) {
-      collections[collection].removeAt(index);
-      return true;
-    }
+    // if (collections[collection][index] != null) {
+    //   collections[collection].removeAt(index);
+    //   return true;
+    // }
 
     return false;
   }
