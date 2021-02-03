@@ -50,14 +50,15 @@ class Storage {
 
   /// Delete data with the given `key` from storage.
   Future delete(String collection, int index) async {
-    // if (!collections.containsKey(collection)) return false;
+    await getCollections().then((collections) async {
+      if (!collections.containsKey(collection)) return false;
 
-    // if (collections[collection][index] != null) {
-    //   collections[collection].removeAt(index);
-    //   return true;
-    // }
+      if (collections[collection][index] != null) {
+        collections[collection].removeAt(index);
+      }
 
-    return false;
+      return await _preferences.setString('collections', jsonEncode(collections));
+    });
   }
 }
 
