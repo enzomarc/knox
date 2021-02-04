@@ -7,7 +7,9 @@ import 'package:knox/core/utils/status_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:knox/widgets/add_category_modal.dart';
 import 'package:knox/widgets/add_account_modal.dart';
+import 'package:knox/widgets/avatar.dart';
 import 'package:knox/widgets/category.dart';
+import 'package:knox/widgets/menu_button.dart';
 import 'package:knox/widgets/password.dart';
 import 'package:provider/provider.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
@@ -21,7 +23,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
   @override
   void initState() {
     final CategoryProvider categoryProvider = Provider.of<CategoryProvider>(context, listen: false);
+    final PasswordProvider passwordProvider = Provider.of<PasswordProvider>(context, listen: false);
     categoryProvider.getCategories();
+    passwordProvider.getPasswords();
 
     super.initState();
   }
@@ -89,6 +93,75 @@ class _DashboardScreenState extends State<DashboardScreen> {
           ),
         ),
       ),
+      drawerScrimColor: Color(0xFF03A69A).withOpacity(0.5),
+      drawer: Padding(
+        padding: EdgeInsets.fromLTRB(20.0, 50.0, 0.0, 20.0),
+        child: Container(
+          width: 300.0,
+          padding: EdgeInsets.symmetric(vertical: 20.0, horizontal: 25.0),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(10.0),
+          ),
+          child: Column(
+            children: <Widget>[
+              Container(
+                padding: EdgeInsets.all(10.0),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10.0),
+                  border: Border.all(
+                    color: Color(0xFF03A69A).withOpacity(0.1),
+                  ),
+                ),
+                child: Row(
+                  children: <Widget>[
+                    AvatarWidget(height: 40.0, width: 40.0),
+                    SizedBox(width: 10.0),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        Text(
+                          'Marc Enzo',
+                          style: TextStyle(
+                            color: Color(0xFF334148),
+                            fontFamily: 'Source SemiBold',
+                            fontSize: 13.0,
+                          ),
+                        ),
+                        SizedBox(height: 3.0),
+                        Text(
+                          'emarc237@gmail.com',
+                          style: TextStyle(
+                            color: Color(0xFF334148).withOpacity(0.5),
+                            fontFamily: 'Source',
+                            fontSize: 11.0,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+              SizedBox(height: 40.0),
+              Expanded(
+                child: ListView(
+                  children: <Widget>[
+                    MenuButton(label: 'Home'),
+                    MenuButton(label: 'Donate', icon: FlutterIcons.attach_money_mdi),
+                    MenuButton(label: 'Rate the app', icon: FlutterIcons.earth_mco),
+                    MenuButton(label: 'Import/Export', icon: FlutterIcons.import_export_mdi),
+                    MenuButton(label: 'Night Mode', icon: FlutterIcons.weather_night_mco, selected: true),
+                    MenuButton(label: 'Lock the app', icon: FlutterIcons.lock_fea),
+                    MenuButton(label: 'Settings', icon: FlutterIcons.settings_fea),
+                  ],
+                ),
+              ),
+              SizedBox(height: 40.0),
+              MenuButton(label: 'Sign Out', icon: FlutterIcons.log_out_fea),
+            ],
+          ),
+        ),
+      ),
       body: SafeArea(
         bottom: false,
         child: Stack(
@@ -128,23 +201,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                   onPressed: () {},
                                 ),
                                 SizedBox(width: 5.0),
-                                Container(
-                                  width: 50.0,
-                                  height: 50.0,
-                                  decoration: BoxDecoration(
-                                    border: Border.all(color: Colors.white, width: 2.0),
-                                    borderRadius: BorderRadius.circular(500.0),
-                                    color: Color(0xFF334148),
-                                    boxShadow: [
-                                      BoxShadow(
-                                        color: Color(0xFF334148).withOpacity(0.4),
-                                        spreadRadius: 2.0,
-                                        blurRadius: 10.0,
-                                        offset: Offset(0, 8),
-                                      ),
-                                    ],
-                                  ),
-                                ),
+                                AvatarWidget(),
                               ],
                             ),
                           ],
