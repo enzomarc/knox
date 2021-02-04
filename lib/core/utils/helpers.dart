@@ -26,7 +26,7 @@ class Helpers {
 
       if (response.statusCode == 200) {
         var data = response.data;
-        icon = (data['icons'] as List).firstWhere((icon) => !icon['src'].endsWith('svg'), orElse: null)['src'];
+        icon = (data['icons'] as List).firstWhere((icon) => !icon['src'].endsWith('svg'))['src'];
       }
     } on DioError catch (e) {
       print("Error while fetching favicon: ${e.message}");

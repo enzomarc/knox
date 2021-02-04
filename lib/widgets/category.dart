@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:flutter_icons/flutter_icons.dart';
 
 class CategoryWidget extends StatelessWidget {
   const CategoryWidget({
@@ -29,7 +30,7 @@ class CategoryWidget extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
             Container(
-              padding: EdgeInsets.all(3.0),
+              padding: EdgeInsets.all(image != null ? 3.0 : 20.0),
               decoration: BoxDecoration(
                 color: Colors.white,
                 borderRadius: BorderRadius.circular(500.0),
@@ -42,17 +43,19 @@ class CategoryWidget extends StatelessWidget {
                   ),
                 ],
               ),
-              child: Container(
-                width: 60.0,
-                height: 60.0,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(500.0),
-                  image: DecorationImage(
-                    fit: BoxFit.fill,
-                    image: localImage ? FileImage(File(image)) : NetworkImage(image),
-                  ),
-                ),
-              ),
+              child: image != null
+                  ? Container(
+                      width: 60.0,
+                      height: 60.0,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(500.0),
+                        image: DecorationImage(
+                          fit: BoxFit.fill,
+                          image: localImage ? FileImage(File(image)) : NetworkImage(image),
+                        ),
+                      ),
+                    )
+                  : Icon(FlutterIcons.layer_group_faw5s, color: Color(0xFF334148)),
             ),
             SizedBox(height: 15.0),
             Text(

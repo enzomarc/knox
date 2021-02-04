@@ -6,7 +6,7 @@ class CategoryService {
 
   getCategories() async {
     List tmp = await storage.get('categories');
-    categories = tmp.map((e) => Category.fromJson(e)).toList();
+    categories = tmp != null ? tmp.map((e) => Category.fromJson(e)).toList() : [];
 
     return categories;
   }

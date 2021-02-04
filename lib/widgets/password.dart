@@ -42,7 +42,7 @@ class PasswordWidget extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
                 Container(
-                  padding: EdgeInsets.all(5.0),
+                  padding: EdgeInsets.all(image != null ? 5.0 : 10.0),
                   decoration: BoxDecoration(
                     color: Colors.white,
                     borderRadius: BorderRadius.circular(500.0),
@@ -55,17 +55,23 @@ class PasswordWidget extends StatelessWidget {
                       ),
                     ],
                   ),
-                  child: Container(
-                    width: 30.0,
-                    height: 30.0,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(500.0),
-                      image: DecorationImage(
-                        fit: BoxFit.fill,
-                        image: localImage ? FileImage(File(image)) : NetworkImage(image),
-                      ),
-                    ),
-                  ),
+                  child: image != null
+                      ? Container(
+                          width: 30.0,
+                          height: 30.0,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(500.0),
+                            image: DecorationImage(
+                              fit: BoxFit.fill,
+                              image: localImage ? FileImage(File(image)) : NetworkImage(image),
+                            ),
+                          ),
+                        )
+                      : Icon(
+                          FlutterIcons.textbox_password_mco,
+                          color: Color(0xFF334148),
+                          size: 20.0,
+                        ),
                 ),
                 SizedBox(width: 15.0),
                 Column(

@@ -128,8 +128,8 @@ class _AddCategoryModalState extends State<AddCategoryModal> {
                     children: <Widget>[
                       FlatButton(
                         onPressed: () async {
-                          if (title.text.isNotEmpty && _image != null) {
-                            Category newCategory = Category(title: title.text, image: _image.path, localImage: true);
+                          if (title.text.isNotEmpty) {
+                            Category newCategory = Category(title: title.text, image: _image != null ? _image.path : null, localImage: true);
                             bool created = await categoryService.storeCategory(newCategory);
 
                             if (created) {

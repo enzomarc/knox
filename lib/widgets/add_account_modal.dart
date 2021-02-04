@@ -185,11 +185,11 @@ class _AddAccountModalState extends State<AddAccountModal> {
                   ),
                   SizedBox(height: 7.0),
                   Text(
-                    'Double Tap on one category and the account will be saved into that category',
+                    'Double Tap on the category you want to save the account in',
                     style: TextStyle(
-                      color: Color(0xFF334148).withOpacity(0.3),
+                      color: Color(0xFF334148).withOpacity(0.5),
                       fontFamily: 'Source',
-                      fontSize: 11.0,
+                      fontSize: 13.0,
                     ),
                   ),
                   SizedBox(height: 10.0),

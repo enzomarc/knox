@@ -6,7 +6,7 @@ class PasswordService {
 
   getPasswords() async {
     List tmp = await storage.get('passwords');
-    passwords = tmp.map((e) => Password.fromJson(e)).toList();
+    passwords = tmp != null ? tmp.map((e) => Password.fromJson(e)).toList() : [];
 
     return passwords;
   }
