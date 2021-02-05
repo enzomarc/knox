@@ -7,19 +7,19 @@ import 'package:knox/core/providers/password_provider.dart';
 import 'package:knox/core/services/password_service.dart';
 import 'package:knox/core/utils/helpers.dart';
 import 'package:provider/provider.dart';
-import 'category.dart';
-import 'custom_field.dart';
+import '../category.dart';
+import '../forms/custom_field.dart';
 
-class AddAccountModal extends StatefulWidget {
-  const AddAccountModal({
+class AddAccountDialog extends StatefulWidget {
+  const AddAccountDialog({
     Key key,
   }) : super(key: key);
 
   @override
-  _AddAccountModalState createState() => _AddAccountModalState();
+  _AddAccountDialogState createState() => _AddAccountDialogState();
 }
 
-class _AddAccountModalState extends State<AddAccountModal> {
+class _AddAccountDialogState extends State<AddAccountDialog> {
   TextEditingController title = TextEditingController();
   TextEditingController website = TextEditingController();
   TextEditingController username = TextEditingController();

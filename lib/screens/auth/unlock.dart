@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_icons/flutter_icons.dart';
-import 'package:knox/widgets/avatar.dart';
-import 'package:knox/widgets/passcode_widget.dart';
+import 'package:knox/widgets/common/avatar.dart';
+import 'package:knox/widgets/forms/passcode_widget.dart';
 
 class UnlockScreen extends StatefulWidget {
   @override

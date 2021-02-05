@@ -6,18 +6,18 @@ import 'package:knox/core/models/category.dart';
 import 'package:knox/core/providers/category_provider.dart';
 import 'package:knox/core/services/category_service.dart';
 import 'package:provider/provider.dart';
-import 'custom_field.dart';
+import '../forms/custom_field.dart';
 
-class AddCategoryModal extends StatefulWidget {
-  const AddCategoryModal({
+class AddCategoryDialog extends StatefulWidget {
+  const AddCategoryDialog({
     Key key,
   }) : super(key: key);
 
   @override
-  _AddCategoryModalState createState() => _AddCategoryModalState();
+  _AddCategoryDialogState createState() => _AddCategoryDialogState();
 }
 
-class _AddCategoryModalState extends State<AddCategoryModal> {
+class _AddCategoryDialogState extends State<AddCategoryDialog> {
   TextEditingController title = TextEditingController();
   File _image;
   ImagePicker picker = ImagePicker();

@@ -5,11 +5,11 @@ import 'package:knox/core/providers/category_provider.dart';
 import 'package:knox/core/providers/password_provider.dart';
 import 'package:knox/core/utils/status_bar.dart';
 import 'package:flutter/material.dart';
-import 'package:knox/widgets/add_category_modal.dart';
-import 'package:knox/widgets/add_account_modal.dart';
-import 'package:knox/widgets/avatar.dart';
+import 'package:knox/widgets/dialogs/add_category_dialog.dart';
+import 'package:knox/widgets/dialogs/add_account_dialog.dart';
+import 'package:knox/widgets/common/avatar.dart';
 import 'package:knox/widgets/category.dart';
-import 'package:knox/widgets/menu_widget.dart';
+import 'package:knox/widgets/common/menu_widget.dart';
 import 'package:knox/widgets/password.dart';
 import 'package:provider/provider.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
@@ -53,7 +53,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   topRight: Radius.circular(30.0),
                 ),
               ),
-              builder: (BuildContext context) => AddAccountModal(),
+              builder: (BuildContext context) => AddAccountDialog(),
             );
           },
           child: Container(
@@ -261,7 +261,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                         topRight: Radius.circular(30.0),
                                       ),
                                     ),
-                                    builder: (BuildContext context) => AddCategoryModal(),
+                                    builder: (BuildContext context) => AddCategoryDialog(),
                                   );
                                 },
                                 child: Container(
