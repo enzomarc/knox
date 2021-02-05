@@ -3,12 +3,12 @@ import 'package:flutter_icons/flutter_icons.dart';
 import 'package:knox/widgets/common/avatar.dart';
 import 'package:knox/widgets/forms/passcode_widget.dart';
 
-class UnlockScreen extends StatefulWidget {
+class CodeScreen extends StatefulWidget {
   @override
-  _UnlockScreenState createState() => _UnlockScreenState();
+  _CodeScreenState createState() => _CodeScreenState();
 }
 
-class _UnlockScreenState extends State<UnlockScreen> {
+class _CodeScreenState extends State<CodeScreen> {
   String _code;
 
   @override
@@ -51,7 +51,7 @@ class _UnlockScreenState extends State<UnlockScreen> {
                     children: <Widget>[
                       Image.asset('assets/images/locker_icon.png'),
                       Text(
-                        'Enter your passcode',
+                        'Create your passcode',
                         style: TextStyle(
                           color: Color(0xFF334148),
                           fontFamily: 'Source SemiBold',
@@ -60,7 +60,7 @@ class _UnlockScreenState extends State<UnlockScreen> {
                       ),
                       SizedBox(height: 15.0),
                       Text(
-                        'For the security of your account, please enter the security code',
+                        'To avoid everybody to access and view your accounts, define a passcode for the app locking',
                         textAlign: TextAlign.center,
                         style: TextStyle(
                           color: Color(0xFF334148).withOpacity(0.7),
@@ -92,7 +92,7 @@ class _UnlockScreenState extends State<UnlockScreen> {
                         color: Color(0xFF334148).withOpacity(0.7),
                         iconSize: 40.0,
                         onPressed: () {
-                          Navigator.pushNamed(context, '/register/general');
+                          Navigator.pushNamed(context, '/register');
                         },
                       ),
                       SizedBox(height: 5.0),
@@ -107,7 +107,7 @@ class _UnlockScreenState extends State<UnlockScreen> {
                           ),
                           children: [
                             TextSpan(
-                              text: 'to verify\nfor easy security',
+                              text: 'to add\nfingerprint security',
                               style: TextStyle(
                                 fontFamily: 'Source',
                                 color: Color(0xFF334148).withOpacity(0.7),
