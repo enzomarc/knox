@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_icons/flutter_icons.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:knox/core/utils/helpers.dart';
 import 'package:knox/widgets/forms/custom_field.dart';
 
 class RegisterScreen extends StatefulWidget {
@@ -13,6 +14,7 @@ class RegisterScreen extends StatefulWidget {
 class _RegisterScreenState extends State<RegisterScreen> {
   File _image;
   ImagePicker picker = ImagePicker();
+  GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
 
   Future getImage() async {
     final pickedFile = await picker.getImage(source: ImageSource.gallery);
@@ -31,6 +33,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
     Size screenSize = MediaQuery.of(context).size;
 
     return Scaffold(
+      key: scaffoldKey,
       backgroundColor: Color(0xFF03A69A),
       body: SafeArea(
         child: SingleChildScrollView(
@@ -147,35 +150,39 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         children: <Widget>[
                           RaisedButton(
                             onPressed: () {
-                              Navigator.pushNamed(context, '/register/code');
+                              // Navigator.pushNamed(context, '/register/code');
+                              helpers.alert(scaffoldKey, "You need to enter all informations to continue", title: "Missing fields");
                             },
                             color: Color(0xFF334148),
                             splashColor: Color(0xFF03A69A).withOpacity(0.3),
-                            padding: EdgeInsets.symmetric(horizontal: 25.0),
+                            padding: EdgeInsets.symmetric(horizontal: 15.0),
                             elevation: 5.0,
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(5.0),
                               side: BorderSide(color: Color(0xFF334148), width: 1.5),
                             ),
-                            child: Row(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: <Widget>[
-                                Text(
-                                  'Next Step',
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                    fontFamily: 'Source Semibold',
-                                    fontSize: 14.0,
+                            child: Expanded(
+                              child: Row(
+                                mainAxisSize: MainAxisSize.max,
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: <Widget>[
+                                  Text(
+                                    'Next Step',
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontFamily: 'Source Semibold',
+                                      fontSize: 14.0,
+                                    ),
                                   ),
-                                ),
-                                SizedBox(width: 5.0),
-                                Icon(
-                                  FlutterIcons.arrow_right_fea,
-                                  color: Colors.white,
-                                  size: 16.0,
-                                ),
-                              ],
+                                  SizedBox(width: 15.0),
+                                  Icon(
+                                    FlutterIcons.arrow_right_fea,
+                                    color: Colors.white,
+                                    size: 16.0,
+                                  ),
+                                ],
+                              ),
                             ),
                           ),
                         ],

@@ -1,5 +1,6 @@
 import 'dart:math';
 import 'package:dio/dio.dart';
+import 'package:flutter/material.dart';
 import 'package:knox/core/resources/dio_wrapper.dart';
 
 class Helpers {
@@ -33,6 +34,56 @@ class Helpers {
     }
 
     return icon;
+  }
+
+  /// Show an alert using the snackbar
+  /// of the current showed Scaffold.
+  void alert(GlobalKey<ScaffoldState> scaffoldKey, String message, {String title}) {
+    scaffoldKey.currentState.showSnackBar(
+      SnackBar(
+        backgroundColor: Colors.transparent,
+        elevation: 0.0,
+        content: Container(
+          padding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 15.0),
+          decoration: BoxDecoration(
+            color: Color(0xFF334148).withOpacity(0.8),
+            borderRadius: BorderRadius.circular(title == null ? 100.0 : 10.0),
+          ),
+          child: title == null
+              ? Text(
+                  message ?? "random content",
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontFamily: "Source",
+                    fontSize: 13.0,
+                  ),
+                )
+              : Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Text(
+                      title,
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontFamily: "Source SemiBold",
+                        fontSize: 13.0,
+                      ),
+                    ),
+                    SizedBox(height: 5.0),
+                    Text(
+                      message ?? "random content",
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontFamily: "Source",
+                        fontSize: 13.0,
+                      ),
+                    ),
+                  ],
+                ),
+        ),
+      ),
+    );
   }
 }
 
