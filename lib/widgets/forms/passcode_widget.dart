@@ -75,11 +75,12 @@ class _PasscodeWidgetState extends State<PasscodeWidget> {
                 parts[3] = value;
                 code = parts.join();
               });
-
-              widget.onChanged(parts.join());
             } else {
               focusNode3.requestFocus();
             }
+          },
+          onSubmit: (String str) {
+            widget.onChanged(parts.join());
           },
         ),
       ],
@@ -91,10 +92,12 @@ class CodeWidget extends StatelessWidget {
   const CodeWidget({
     Key key,
     this.onChanged,
+    this.onSubmit,
     this.node,
   }) : super(key: key);
 
   final Function(String value) onChanged;
+  final Function onSubmit;
   final FocusNode node;
 
   @override
@@ -104,6 +107,7 @@ class CodeWidget extends StatelessWidget {
       child: TextFormField(
         focusNode: node,
         onChanged: onChanged,
+        onFieldSubmitted: onSubmit,
         keyboardType: TextInputType.number,
         textAlign: TextAlign.center,
         inputFormatters: [LengthLimitingTextInputFormatter(1)],

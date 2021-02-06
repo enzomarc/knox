@@ -1,10 +1,13 @@
 import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_icons/flutter_icons.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:knox/core/models/user.dart';
+import 'package:knox/core/providers/user_provider.dart';
+import 'package:knox/core/services/user_service.dart';
 import 'package:knox/core/utils/helpers.dart';
 import 'package:knox/widgets/forms/custom_field.dart';
+import 'package:provider/provider.dart';
 
 class RegisterScreen extends StatefulWidget {
   @override
@@ -12,9 +15,11 @@ class RegisterScreen extends StatefulWidget {
 }
 
 class _RegisterScreenState extends State<RegisterScreen> {
-  File _image;
-  ImagePicker picker = ImagePicker();
   GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
+  ImagePicker picker = ImagePicker();
+  File _image;
+  TextEditingController name = TextEditingController();
+  TextEditingController email = TextEditingController();
 
   Future getImage() async {
     final pickedFile = await picker.getImage(source: ImageSource.gallery);
@@ -26,6 +31,23 @@ class _RegisterScreenState extends State<RegisterScreen> {
         print('No image selected.');
       }
     });
+  }
+
+  Future createAccount() async {
+    UserProvider provider = Provider.of<UserProvider>(context, listen: false);
+
+    if (name.text.isEmpty || email.text.isEmpty) {
+      helpers.alert(scaffoldKey, 'Name and email are required to continue.', title: 'Missing fields');
+    } else {
+      User user = User(name: name.text, email: email.text, image: _image != null ? _image.path : null);
+      bool created = await userService.createAccount(user);
+
+      if (created) {
+        provider.getUser();
+        Navigator.pushNamed(context, '/register/code');
+      } else
+        helpers.alert(scaffoldKey, 'An error occured, retry later.', title: 'Error occured');
+    }
   }
 
   @override
@@ -135,6 +157,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       CustomField(
                         label: 'Name',
                         placeholder: 'Enter your full name',
+                        controller: name,
                         icon: FlutterIcons.user_fea,
                       ),
                       SizedBox(height: 20.0),
@@ -142,6 +165,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         label: 'Email',
                         placeholder: 'address@company.com',
                         type: TextInputType.emailAddress,
+                        controller: email,
                         icon: FlutterIcons.mail_fea,
                       ),
                       SizedBox(height: 40.0),
@@ -149,9 +173,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         mainAxisAlignment: MainAxisAlignment.end,
                         children: <Widget>[
                           RaisedButton(
-                            onPressed: () {
-                              // Navigator.pushNamed(context, '/register/code');
-                              helpers.alert(scaffoldKey, "You need to enter all informations to continue", title: "Missing fields");
+                            onPressed: () async {
+                              createAccount();
                             },
                             color: Color(0xFF334148),
                             splashColor: Color(0xFF03A69A).withOpacity(0.3),
@@ -161,28 +184,26 @@ class _RegisterScreenState extends State<RegisterScreen> {
                               borderRadius: BorderRadius.circular(5.0),
                               side: BorderSide(color: Color(0xFF334148), width: 1.5),
                             ),
-                            child: Expanded(
-                              child: Row(
-                                mainAxisSize: MainAxisSize.max,
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: <Widget>[
-                                  Text(
-                                    'Next Step',
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                      fontFamily: 'Source Semibold',
-                                      fontSize: 14.0,
-                                    ),
-                                  ),
-                                  SizedBox(width: 15.0),
-                                  Icon(
-                                    FlutterIcons.arrow_right_fea,
+                            child: Row(
+                              mainAxisSize: MainAxisSize.max,
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: <Widget>[
+                                Text(
+                                  'Next Step',
+                                  style: TextStyle(
                                     color: Colors.white,
-                                    size: 16.0,
+                                    fontFamily: 'Source Semibold',
+                                    fontSize: 14.0,
                                   ),
-                                ],
-                              ),
+                                ),
+                                SizedBox(width: 15.0),
+                                Icon(
+                                  FlutterIcons.arrow_right_fea,
+                                  color: Colors.white,
+                                  size: 16.0,
+                                ),
+                              ],
                             ),
                           ),
                         ],

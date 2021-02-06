@@ -5,7 +5,7 @@ import 'package:knox/screens/auth/unlock.dart';
 import 'package:knox/screens/dashboard.dart';
 
 final Map<String, Widget Function(BuildContext)> routes = {
-  "/": (context) => DashboardScreen(),
+  "/dashboard": (context) => DashboardScreen(),
   "/register/general": (context) => RegisterScreen(),
   "/register/code": (context) => CodeScreen(),
   "/unlock": (context) => UnlockScreen(),

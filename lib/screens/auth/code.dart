@@ -1,7 +1,13 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_icons/flutter_icons.dart';
+import 'package:knox/core/providers/user_provider.dart';
+import 'package:knox/core/services/user_service.dart';
+import 'package:knox/core/utils/helpers.dart';
 import 'package:knox/widgets/common/avatar.dart';
 import 'package:knox/widgets/forms/passcode_widget.dart';
+import 'package:provider/provider.dart';
 
 class CodeScreen extends StatefulWidget {
   @override
@@ -9,13 +15,14 @@ class CodeScreen extends StatefulWidget {
 }
 
 class _CodeScreenState extends State<CodeScreen> {
-  String _code;
+  GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
   Widget build(BuildContext context) {
     Size screenSize = MediaQuery.of(context).size;
 
     return Scaffold(
+      key: scaffoldKey,
       backgroundColor: Color(0xFF03A69A),
       body: SafeArea(
         child: Container(
@@ -72,9 +79,20 @@ class _CodeScreenState extends State<CodeScreen> {
                       SizedBox(
                         width: screenSize.width - 150.0,
                         child: PasscodeWidget(
-                          onChanged: (code) => setState(() {
-                            _code = code;
-                          }),
+                          onChanged: (code) async {
+                            if (code.length < 4) {
+                              helpers.alert(scaffoldKey, 'Enter valid passcode to continue.');
+                            } else {
+                              bool stored = await userService.setPasscode(code);
+
+                              if (stored) {
+                                Navigator.pushReplacementNamed(context, '/dashboard');
+                                helpers.alert(scaffoldKey, 'Your user account was created, now you can manage your accounts.', title: 'Account created');
+                              } else {
+                                helpers.alert(scaffoldKey, 'Unable to create your account, retry later.', title: 'Error occured');
+                              }
+                            }
+                          },
                         ),
                       ),
                       SizedBox(height: 40.0),
@@ -122,17 +140,14 @@ class _CodeScreenState extends State<CodeScreen> {
                 ),
                 SizedBox(height: 50.0),
                 Center(
-                  child: AvatarWidget(
-                    height: 70.0,
-                    width: 70.0,
-                  ),
-                ),
-                SizedBox(height: 10.0),
-                Text(
-                  'Marc Enzo',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontFamily: 'Source SemiBold',
+                  child: Consumer<UserProvider>(
+                    builder: (context, value, child) {
+                      return AvatarWidget(
+                        size: 70.0,
+                        avatar: FileImage(File(value.user.image)),
+                        label: value.user.name,
+                      );
+                    },
                   ),
                 ),
               ],
