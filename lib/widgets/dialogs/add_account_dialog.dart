@@ -13,7 +13,10 @@ import '../forms/custom_field.dart';
 class AddAccountDialog extends StatefulWidget {
   const AddAccountDialog({
     Key key,
+    @required this.scaffoldKey,
   }) : super(key: key);
+
+  final GlobalKey<ScaffoldState> scaffoldKey;
 
   @override
   _AddAccountDialogState createState() => _AddAccountDialogState();
@@ -144,6 +147,7 @@ class _AddAccountDialogState extends State<AddAccountDialog> {
                     icon: FlutterIcons.lock_fea,
                     controller: _password,
                     isPassword: true,
+                    onChanged: (String value) {},
                     suffix: GestureDetector(
                       onTap: () {
                         setState(() {
@@ -219,9 +223,14 @@ class _AddAccountDialogState extends State<AddAccountDialog> {
 
                               bool created = await passwordService.storePassword(password);
                               if (created) {
+                                helpers.alert(widget.scaffoldKey, 'New account created successfully.', title: 'Account added');
                                 passwordProvider.getPasswords();
                                 Navigator.pop(context);
+                              } else {
+                                helpers.alert(widget.scaffoldKey, 'An error occured, unable to add the new account.', title: 'Error occured');
                               }
+                            } else {
+                              helpers.alert(widget.scaffoldKey, 'The account title and username/id are required.', title: 'Missing fields');
                             }
                           },
                         );

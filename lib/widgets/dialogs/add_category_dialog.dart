@@ -5,13 +5,17 @@ import 'package:image_picker/image_picker.dart';
 import 'package:knox/core/models/category.dart';
 import 'package:knox/core/providers/category_provider.dart';
 import 'package:knox/core/services/category_service.dart';
+import 'package:knox/core/utils/helpers.dart';
 import 'package:provider/provider.dart';
 import '../forms/custom_field.dart';
 
 class AddCategoryDialog extends StatefulWidget {
   const AddCategoryDialog({
     Key key,
+    @required this.scaffoldKey,
   }) : super(key: key);
+
+  final GlobalKey<ScaffoldState> scaffoldKey;
 
   @override
   _AddCategoryDialogState createState() => _AddCategoryDialogState();
@@ -133,9 +137,14 @@ class _AddCategoryDialogState extends State<AddCategoryDialog> {
                             bool created = await categoryService.storeCategory(newCategory);
 
                             if (created) {
+                              helpers.alert(widget.scaffoldKey, 'The category ${title.text} was added successfully.', title: 'New category added');
                               provider.getCategories();
                               Navigator.pop(context);
+                            } else {
+                              helpers.alert(widget.scaffoldKey, 'An error occured, unable to add the new category.', title: 'Error occured');
                             }
+                          } else {
+                            helpers.alert(widget.scaffoldKey, 'The category title is required.');
                           }
                         },
                         color: Colors.transparent,
