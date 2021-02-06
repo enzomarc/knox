@@ -1,8 +1,10 @@
+import 'dart:io';
 import 'package:flutter_icons/flutter_icons.dart';
 import 'package:knox/core/models/category.dart';
 import 'package:knox/core/models/password.dart';
 import 'package:knox/core/providers/category_provider.dart';
 import 'package:knox/core/providers/password_provider.dart';
+import 'package:knox/core/providers/user_provider.dart';
 import 'package:knox/core/utils/status_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:knox/widgets/dialogs/add_category_dialog.dart';
@@ -20,8 +22,12 @@ class DashboardScreen extends StatefulWidget {
 }
 
 class _DashboardScreenState extends State<DashboardScreen> {
+  GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
+  bool loaded = false;
+
   @override
   void initState() {
+    // load data
     final CategoryProvider categoryProvider = Provider.of<CategoryProvider>(context, listen: false);
     final PasswordProvider passwordProvider = Provider.of<PasswordProvider>(context, listen: false);
     categoryProvider.getCategories();
@@ -36,6 +42,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
     statusBar.setColor(context: context);
 
     return Scaffold(
+      key: scaffoldKey,
       backgroundColor: Color(0xFF03A69A),
       resizeToAvoidBottomInset: false,
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
@@ -53,7 +60,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   topRight: Radius.circular(30.0),
                 ),
               ),
-              builder: (BuildContext context) => AddAccountDialog(),
+              builder: (BuildContext context) => AddAccountDialog(scaffoldKey: scaffoldKey),
             );
           },
           child: Container(
@@ -134,7 +141,15 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                   onPressed: () {},
                                 ),
                                 SizedBox(width: 5.0),
-                                AvatarWidget(),
+                                Consumer<UserProvider>(
+                                  builder: (context, value, child) => AvatarWidget(
+                                    avatar: value.user != null && value.user.image != null
+                                        ? FileImage(
+                                            File(value.user.image),
+                                          )
+                                        : null,
+                                  ),
+                                ),
                               ],
                             ),
                           ],
@@ -149,12 +164,14 @@ class _DashboardScreenState extends State<DashboardScreen> {
                           ),
                         ),
                         SizedBox(height: 5.0),
-                        Text(
-                          'Marc Enzo',
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontFamily: 'Coves Bold',
-                            fontSize: 35.0,
+                        Consumer<UserProvider>(
+                          builder: (context, value, child) => Text(
+                            value.user != null ? value.user.name : 'Get Started',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontFamily: 'Coves Bold',
+                              fontSize: 35.0,
+                            ),
                           ),
                         ),
                         SizedBox(height: 25.0),
@@ -261,7 +278,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                         topRight: Radius.circular(30.0),
                                       ),
                                     ),
-                                    builder: (BuildContext context) => AddCategoryDialog(),
+                                    builder: (BuildContext context) => AddCategoryDialog(scaffoldKey: scaffoldKey),
                                   );
                                 },
                                 child: Container(

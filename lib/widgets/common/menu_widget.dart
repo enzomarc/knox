@@ -1,5 +1,9 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_icons/flutter_icons.dart';
+import 'package:knox/core/providers/user_provider.dart';
+import 'package:provider/provider.dart';
 import 'avatar.dart';
 import 'menu_button.dart';
 
@@ -31,29 +35,40 @@ class MenuWidget extends StatelessWidget {
               ),
               child: Row(
                 children: <Widget>[
-                  AvatarWidget(height: 40.0, width: 40.0),
+                  Consumer<UserProvider>(
+                    builder: (context, value, child) => AvatarWidget(
+                      avatar: value.user != null
+                          ? FileImage(
+                              File(value.user.image),
+                            )
+                          : null,
+                      size: 40.0,
+                    ),
+                  ),
                   SizedBox(width: 10.0),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      Text(
-                        'Marc Enzo',
-                        style: TextStyle(
-                          color: Color(0xFF334148),
-                          fontFamily: 'Source SemiBold',
-                          fontSize: 13.0,
+                  Consumer<UserProvider>(
+                    builder: (context, value, child) => Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        Text(
+                          value.user != null ? value.user.name : 'Sign in',
+                          style: TextStyle(
+                            color: Color(0xFF334148),
+                            fontFamily: 'Source SemiBold',
+                            fontSize: 13.0,
+                          ),
                         ),
-                      ),
-                      SizedBox(height: 3.0),
-                      Text(
-                        'emarc237@gmail.com',
-                        style: TextStyle(
-                          color: Color(0xFF334148).withOpacity(0.5),
-                          fontFamily: 'Source',
-                          fontSize: 11.0,
+                        SizedBox(height: 3.0),
+                        Text(
+                          value.user != null ? value.user.email : '',
+                          style: TextStyle(
+                            color: Color(0xFF334148).withOpacity(0.5),
+                            fontFamily: 'Source',
+                            fontSize: 11.0,
+                          ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ],
               ),
@@ -70,7 +85,9 @@ class MenuWidget extends StatelessWidget {
                   MenuButton(
                     label: 'Lock the app',
                     icon: FlutterIcons.lock_fea,
-                    onTap: () => Navigator.pushNamed(context, '/unlock'),
+                    onTap: () {
+                      Navigator.pushReplacementNamed(context, '/unlock');
+                    },
                   ),
                   MenuButton(label: 'Settings', icon: FlutterIcons.settings_fea),
                 ],
