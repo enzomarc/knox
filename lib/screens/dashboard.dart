@@ -106,146 +106,150 @@ class _DashboardScreenState extends State<DashboardScreen> {
         bottom: false,
         child: Stack(
           children: <Widget>[
-            Column(
+            Stack(
               children: <Widget>[
-                Expanded(
-                  flex: 2,
-                  child: Container(
-                    padding: EdgeInsets.symmetric(vertical: 20.0, horizontal: 25.0),
-                    decoration: BoxDecoration(
-                      image: DecorationImage(
-                        image: AssetImage('assets/images/dashboard_bg.png'),
-                        fit: BoxFit.cover,
-                      ),
+                Container(
+                  padding: EdgeInsets.symmetric(vertical: 20.0, horizontal: 25.0),
+                  decoration: BoxDecoration(
+                    image: DecorationImage(
+                      image: AssetImage('assets/images/dashboard_bg.png'),
+                      fit: BoxFit.cover,
                     ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: <Widget>[
-                            Icon(
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: <Widget>[
+                          GestureDetector(
+                            onTap: () => scaffoldKey.currentState.openDrawer(),
+                            child: Icon(
                               FlutterIcons.menu_fea,
                               color: Colors.white,
                               size: 20.0,
                             ),
-                            Row(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: <Widget>[
-                                IconButton(
-                                  icon: Icon(
-                                    FlutterIcons.ios_notifications_outline_ion,
-                                    color: Colors.white,
-                                  ),
-                                  onPressed: () {},
+                          ),
+                          Row(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: <Widget>[
+                              IconButton(
+                                icon: Icon(
+                                  FlutterIcons.ios_notifications_outline_ion,
+                                  color: Colors.white,
                                 ),
-                                SizedBox(width: 5.0),
-                                Consumer<UserProvider>(
-                                  builder: (context, value, child) => AvatarWidget(
-                                    avatar: value.user != null && value.user.image != null
-                                        ? FileImage(
-                                            File(value.user.image),
-                                          )
-                                        : null,
-                                  ),
+                                onPressed: () {},
+                              ),
+                              SizedBox(width: 5.0),
+                              Consumer<UserProvider>(
+                                builder: (context, value, child) => AvatarWidget(
+                                  avatar: value.user != null && value.user.image != null
+                                      ? FileImage(
+                                          File(value.user.image),
+                                        )
+                                      : null,
                                 ),
-                              ],
-                            ),
-                          ],
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                      SizedBox(height: 30.0),
+                      Text(
+                        'Welcome home',
+                        style: TextStyle(
+                          color: Colors.white.withOpacity(0.6),
+                          fontFamily: 'Source',
+                          fontSize: 16.0,
                         ),
-                        SizedBox(height: 30.0),
-                        Text(
-                          'Welcome home',
+                      ),
+                      SizedBox(height: 5.0),
+                      Consumer<UserProvider>(
+                        builder: (context, value, child) => Text(
+                          value.user != null ? value.user.name : 'Get Started',
                           style: TextStyle(
-                            color: Colors.white.withOpacity(0.6),
-                            fontFamily: 'Source',
-                            fontSize: 16.0,
+                            color: Colors.white,
+                            fontFamily: 'Coves Bold',
+                            fontSize: 35.0,
                           ),
                         ),
-                        SizedBox(height: 5.0),
-                        Consumer<UserProvider>(
-                          builder: (context, value, child) => Text(
-                            value.user != null ? value.user.name : 'Get Started',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontFamily: 'Coves Bold',
-                              fontSize: 35.0,
-                            ),
-                          ),
-                        ),
-                        SizedBox(height: 25.0),
-                        Row(
-                          children: <Widget>[
-                            Expanded(
-                              child: TextField(
-                                style: TextStyle(
-                                  fontFamily: 'Source SemiBold',
+                      ),
+                      SizedBox(height: 25.0),
+                      Row(
+                        children: <Widget>[
+                          Expanded(
+                            child: TextField(
+                              style: TextStyle(
+                                fontFamily: 'Source SemiBold',
+                                fontSize: 14.0,
+                                color: Color(0xFF334148).withOpacity(0.8),
+                              ),
+                              decoration: InputDecoration(
+                                isDense: true,
+                                filled: true,
+                                fillColor: Colors.white,
+                                floatingLabelBehavior: FloatingLabelBehavior.never,
+                                contentPadding: EdgeInsets.symmetric(vertical: 15.0, horizontal: 10.0),
+                                labelText: "Search",
+                                prefixIcon: Icon(FlutterIcons.search_fea, color: Color(0xFF334148)),
+                                border: OutlineInputBorder(
+                                  borderSide: BorderSide(color: Colors.transparent),
+                                  borderRadius: BorderRadius.circular(100.0),
+                                ),
+                                focusedBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(color: Colors.transparent),
+                                  borderRadius: BorderRadius.circular(100.0),
+                                ),
+                                enabledBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(color: Colors.transparent),
+                                  borderRadius: BorderRadius.circular(100.0),
+                                ),
+                                labelStyle: TextStyle(
+                                  fontFamily: 'Source',
                                   fontSize: 14.0,
                                   color: Color(0xFF334148).withOpacity(0.8),
                                 ),
-                                decoration: InputDecoration(
-                                  isDense: true,
-                                  filled: true,
-                                  fillColor: Colors.white,
-                                  floatingLabelBehavior: FloatingLabelBehavior.never,
-                                  contentPadding: EdgeInsets.symmetric(vertical: 15.0, horizontal: 10.0),
-                                  labelText: "Search",
-                                  prefixIcon: Icon(FlutterIcons.search_fea, color: Color(0xFF334148)),
-                                  border: OutlineInputBorder(
-                                    borderSide: BorderSide(color: Colors.transparent),
-                                    borderRadius: BorderRadius.circular(100.0),
-                                  ),
-                                  focusedBorder: OutlineInputBorder(
-                                    borderSide: BorderSide(color: Colors.transparent),
-                                    borderRadius: BorderRadius.circular(100.0),
-                                  ),
-                                  enabledBorder: OutlineInputBorder(
-                                    borderSide: BorderSide(color: Colors.transparent),
-                                    borderRadius: BorderRadius.circular(100.0),
-                                  ),
-                                  labelStyle: TextStyle(
-                                    fontFamily: 'Source',
-                                    fontSize: 14.0,
-                                    color: Color(0xFF334148).withOpacity(0.8),
-                                  ),
+                              ),
+                            ),
+                          ),
+                          SizedBox(width: 15.0),
+                          GestureDetector(
+                            onTap: () {
+                              // implements search filters
+                            },
+                            child: Container(
+                              padding: EdgeInsets.all(10.0),
+                              decoration: BoxDecoration(
+                                color: Color(0xFFFE8C79),
+                                borderRadius: BorderRadius.circular(10.0),
+                              ),
+                              child: RotatedBox(
+                                quarterTurns: 1,
+                                child: Icon(
+                                  FlutterIcons.ios_options_ion,
+                                  color: Colors.white,
                                 ),
                               ),
                             ),
-                            SizedBox(width: 15.0),
-                            GestureDetector(
-                              onTap: () {
-                                // implements search filters
-                              },
-                              child: Container(
-                                padding: EdgeInsets.all(10.0),
-                                decoration: BoxDecoration(
-                                  color: Color(0xFFFE8C79),
-                                  borderRadius: BorderRadius.circular(10.0),
-                                ),
-                                child: RotatedBox(
-                                  quarterTurns: 1,
-                                  child: Icon(
-                                    FlutterIcons.ios_options_ion,
-                                    color: Colors.white,
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
+                          ),
+                        ],
+                      ),
+                    ],
                   ),
                 ),
-                Expanded(
-                  flex: 4,
+                Align(
+                  alignment: Alignment.bottomCenter,
                   child: Container(
+                    height: screenSize.height / 2 + 100.0,
                     width: screenSize.width,
                     padding: EdgeInsets.fromLTRB(25.0, 30.0, 25.0, 20.0),
                     decoration: BoxDecoration(
                       color: Colors.white,
-                      borderRadius: BorderRadius.only(topLeft: Radius.circular(40.0), topRight: Radius.circular(40.0)),
+                      borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(40.0),
+                        topRight: Radius.circular(40.0),
+                      ),
                     ),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,

@@ -27,13 +27,15 @@ class _AddAccountDialogState extends State<AddAccountDialog> {
   TextEditingController website = TextEditingController();
   TextEditingController username = TextEditingController();
   TextEditingController _password = TextEditingController();
+  bool showPassword = false;
   String imageUrl;
 
   @override
   Widget build(BuildContext context) {
     Size screenSize = MediaQuery.of(context).size;
     final provider = Provider.of<CategoryProvider>(context, listen: false);
-    final passwordProvider = Provider.of<PasswordProvider>(context, listen: false);
+    final passwordProvider =
+        Provider.of<PasswordProvider>(context, listen: false);
     List<Category> categories = provider.categories;
 
     return Container(
@@ -125,10 +127,10 @@ class _AddAccountDialogState extends State<AddAccountDialog> {
                     placeholder: 'Enter website URL',
                     type: TextInputType.url,
                     controller: website,
-                    onChanged: (str) async {
-                      await helpers.grabFavicon(str).then((value) {
+                    onSubmit: (str) async {
+                      await helpers.grabFavicon(str).then((icon) {
                         setState(() {
-                          imageUrl = value;
+                          imageUrl = icon;
                         });
                       });
                     },
@@ -147,10 +149,15 @@ class _AddAccountDialogState extends State<AddAccountDialog> {
                     icon: FlutterIcons.lock_fea,
                     controller: _password,
                     isPassword: true,
-                    onChanged: (String value) {},
+                    onChanged: (String value) {
+                      setState(() {
+                        showPassword = false;
+                      });
+                    },
                     suffix: GestureDetector(
                       onTap: () {
                         setState(() {
+                          showPassword = true;
                           _password.text = helpers.randomString(13);
                         });
                       },
@@ -165,17 +172,20 @@ class _AddAccountDialogState extends State<AddAccountDialog> {
                           ),
                           borderRadius: BorderRadius.circular(3.0),
                         ),
-                        child: Icon(FlutterIcons.refresh_cw_fea, color: Color(0xFFFE8C79), size: 14.0),
+                        child: Icon(FlutterIcons.refresh_cw_fea,
+                            color: Color(0xFFFE8C79), size: 14.0),
                       ),
                     ),
                   ),
                   SizedBox(height: 3.0),
                   Text(
-                    _password.text.isNotEmpty ? "Generated: ${_password.text}" : '',
+                    showPassword && _password.text.isNotEmpty
+                        ? "Generated: ${_password.text}"
+                        : '',
                     style: TextStyle(
-                      color: Color(0xFF334148).withOpacity(0.3),
-                      fontFamily: 'Source',
-                      fontSize: 10.0,
+                      color: Color(0xFF334148).withOpacity(0.5),
+                      fontFamily: 'Source SemiBold',
+                      fontSize: 11.0,
                     ),
                   ),
                   SizedBox(height: 20.0),
@@ -210,7 +220,8 @@ class _AddAccountDialogState extends State<AddAccountDialog> {
                           image: category.image,
                           localImage: category.localImage,
                           onDoubleTap: () async {
-                            if (title.text.isNotEmpty && username.text.isNotEmpty) {
+                            if (title.text.isNotEmpty &&
+                                username.text.isNotEmpty) {
                               Password password = Password(
                                 title: title.text,
                                 category: category.title.toLowerCase(),
@@ -221,16 +232,23 @@ class _AddAccountDialogState extends State<AddAccountDialog> {
                                 localImage: false,
                               );
 
-                              bool created = await passwordService.storePassword(password);
+                              bool created =
+                                  await passwordService.storePassword(password);
                               if (created) {
-                                helpers.alert(widget.scaffoldKey, 'New account created successfully.', title: 'Account added');
+                                helpers.alert(widget.scaffoldKey,
+                                    'New account created successfully.',
+                                    title: 'Account added');
                                 passwordProvider.getPasswords();
                                 Navigator.pop(context);
                               } else {
-                                helpers.alert(widget.scaffoldKey, 'An error occured, unable to add the new account.', title: 'Error occured');
+                                helpers.alert(widget.scaffoldKey,
+                                    'An error occured, unable to add the new account.',
+                                    title: 'Error occured');
                               }
                             } else {
-                              helpers.alert(widget.scaffoldKey, 'The account title and username/id are required.', title: 'Missing fields');
+                              helpers.alert(widget.scaffoldKey,
+                                  'The account title and username/id are required.',
+                                  title: 'Missing fields');
                             }
                           },
                         );

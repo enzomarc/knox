@@ -12,6 +12,7 @@ class CustomField extends StatelessWidget {
     this.type = TextInputType.text,
     this.isPassword = false,
     this.suffix,
+    this.onSubmit,
     this.onChanged,
   }) : super(key: key);
 
@@ -23,6 +24,7 @@ class CustomField extends StatelessWidget {
   final TextEditingController controller;
   final TextInputType type;
   final Widget suffix;
+  final Function(String str) onSubmit;
   final Function(String str) onChanged;
 
   @override
@@ -43,7 +45,8 @@ class CustomField extends StatelessWidget {
           controller: controller ?? TextEditingController(),
           keyboardType: type,
           obscureText: isPassword,
-          onSubmitted: onChanged,
+          onSubmitted: onSubmit,
+          onChanged: onChanged,
           style: TextStyle(
             color: Color(0xFF334148).withOpacity(0.8),
             fontFamily: 'Source SemiBold',
